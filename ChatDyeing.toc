@@ -1,0 +1,6 @@
+## Interface: 80100
+## Title: ChatDyeing
+## Author: anarnwa
+## Version: 8.1.5
+## SavedVariables: ChatDyeing 
+ChatDyeing.lua
