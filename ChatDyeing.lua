@@ -262,14 +262,6 @@ local function addfilterlist()
     end
 end
 
-function showfri()
-    for k,v in pairs(friends) do
-        print(v)
-    end
-    
-end
-
-
 Event("PLAYER_LOGIN", function()
     ADDfilter()
 end)
