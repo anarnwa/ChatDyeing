@@ -125,10 +125,6 @@ local psfilter = function(_, event, msg, player, ...)
     if friends == {} then
         return false
     else
-
-
-
-        
         local tag = ""
         --local chanid, found, modify = select(5, ...), 0, nil
         for i = 1, #(friends) do
