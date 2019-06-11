@@ -234,7 +234,11 @@ local function addfriends()
     for k, v in pairs(aa) do
         table.insert(friends, k)
     end
-    table.sort(friends, function(a, b) return tostring(a) > tostring(b) end)
+    table.sort(friends, function(a, b) 
+        if len(a)>len(b) then return true end 
+        if len(a)<len(b) then return false end 
+        return tostring(a) > tostring(b) 
+    end)
 end
 
 local function addfilterlist()
