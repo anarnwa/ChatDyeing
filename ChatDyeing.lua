@@ -1,5 +1,5 @@
-local friends = {}
-
+local friends = {} --存储关键字
+--注册事件
 local function Event(event, handler)
     if _G.event == nil then
         _G.event = CreateFrame("Frame")
@@ -17,9 +17,8 @@ local function Event(event, handler)
     end
     table.insert(_G.event.handler[event], handler)
 end
-
-
-local function colortxt(name)
+--获取目标职业
+local function GetClass(name)
     if name then
         if UnitInRaid(name) or UnitInParty(name) or name == "player" then
             local _, rsctekclass = UnitClass(name)
@@ -33,8 +32,7 @@ local function colortxt(name)
     end
 
 end
-
-
+--返回存储的角色职业
 local function GetColor(nr, name)
     if name then
         if nr == 2 then
@@ -52,7 +50,7 @@ local function GetColor(nr, name)
                 name = string.sub(name, 1, string.find(name, "%%") - 1)
             end
             
-            local color = colortxt(name)
+            local color = GetClass(name)
             
             if color ~= "" then
                 return color
@@ -73,7 +71,7 @@ local function GetColor(nr, name)
         end
     end
 end
-
+--获取字符串最后一个|c后的字符
 local function substringend(str, k)
     local ts = string.reverse(str)
     k = string.reverse(k)
@@ -84,13 +82,13 @@ local function substringend(str, k)
     end
     return "|r"
 end
-
+--为字符串添加颜色
 local function addcolor(str1, tag, str2)
     local strmid = string.gsub(tag, "%%%-", "-")
     local str1end = substringend(string.lower(str1), "|cff")
     local stra, strb = string.find(str1end, "|r")
     if stra then
-        strmid = "|c"..RAID_CLASS_COLORS[GetColor(1, tag)].colorStr.. strmid .. "|r" --处理tag  将tag染色   
+        strmid = "|c" .. RAID_CLASS_COLORS[GetColor(1, tag)].colorStr .. strmid .. "|r" --处理tag  将tag染色
     end
     local a, b = string.find(str2, tag)--查看后续还有没有tag
     if a then --如果有
@@ -98,9 +96,7 @@ local function addcolor(str1, tag, str2)
     end
     return str1 .. strmid .. tostring(str2)
 end
-
-
-
+--过滤函数
 local psfilter = function(_, event, msg, player, ...)
     if friends == {} then
         return false
@@ -120,7 +116,66 @@ local psfilter = function(_, event, msg, player, ...)
         return false, msg, player, ...
     end
 end
-
+--添加关键字
+local function addfriends()
+    local name, realm = UnitFullName("player")
+    for i in pairs(ChatDyeing) do
+        table.insert(friends, ChatDyeing[i]["oname"] .. "%-" .. ChatDyeing[i]["orealm"])
+        table.insert(friends, ChatDyeing[i]["oname"])
+    end
+    local aa = {}
+    for k, v in pairs(friends) do
+        aa[v] = true
+    end
+    friends = {}
+    for k, v in pairs(aa) do
+        table.insert(friends, k)
+    end
+    table.sort(friends, function(a, b)
+        if string.len(a) > string.len(b) then return true end
+        if string.len(a) < string.len(b) then return false end
+        return tostring(a) > tostring(b)
+    end)
+end
+--存储信息
+local function addfilterlist()
+    local name, realm = UnitFullName("player")
+    ChatDyeing[name .. "-" .. realm] = {
+        oname = name,
+        oclass = GetClass("player"),
+        orealm = realm,
+    }
+    if IsInRaid() then
+        rnum = GetNumGroupMembers()
+        for i = 1, rnum - 1 do
+            local name1 = GetUnitName("raid" .. i, true)
+            local realm1 = string.gsub(name1, ".+%-", "")
+            name1 = string.gsub(name1, "%-" .. realm1, "")
+            if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
+            ChatDyeing[name1 .. "-" .. realm1] = {
+                oname = name1,
+                oclass = GetClass(name1),
+                orealm = realm1,
+            }
+        end
+    end
+    if IsInGroup() then
+        rnum = GetNumGroupMembers()
+        for i = 1, rnum - 1 do
+            local name1 = GetUnitName("party" .. i, true)
+            local realm1 = string.gsub(name1, ".+%-", "")
+            name1 = string.gsub(name1, "%-" .. realm1, "")
+            if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
+            ChatDyeing[name1 .. "-" .. realm1] = {
+                oname = name1,
+                oclass = GetClass(name1),
+                orealm = realm1,
+            }
+        
+        end
+    end
+end
+--过滤频道
 local function ADDfilter()
     ChatFrame_AddMessageEventFilter("CHAT_MSG_ACHIEVEMENT", psfilter)
     ChatFrame_AddMessageEventFilter("CHAT_MSG_AFK", psfilter)
@@ -186,80 +241,21 @@ local function ADDfilter()
     ChatFrame_AddMessageEventFilter("CHAT_MSG_WHISPER_INFORM", psfilter)
     ChatFrame_AddMessageEventFilter("CHAT_MSG_YELL", psfilter)
 end
-
-local function addfriends()
-    local name, realm = UnitFullName("player")
-    for i in pairs(ChatDyeing) do
-        table.insert(friends, ChatDyeing[i]["oname"] .. "%-" .. ChatDyeing[i]["orealm"])
-        table.insert(friends, ChatDyeing[i]["oname"])
-    end
-    local aa = {}
-    for k, v in pairs(friends) do
-        aa[v] = true
-    end
-    friends = {}
-    for k, v in pairs(aa) do
-        table.insert(friends, k)
-    end
-    table.sort(friends, function(a, b) 
-        if string.len(a)>string.len(b) then return true end 
-        if string.len(a)<string.len(b) then return false end 
-        return tostring(a) > tostring(b) 
-    end)
-end
-
-local function addfilterlist()
-    local name, realm = UnitFullName("player")
-    ChatDyeing[name .. "-" .. realm] = {
-        oname = name,
-        oclass = colortxt("player"),
-        orealm = realm,
-    }
-    if IsInRaid() then
-        rnum = GetNumGroupMembers()
-        for i = 1, rnum - 1 do
-            local name1 = GetUnitName("raid" .. i, true)
-            local realm1 = string.gsub(name1, ".+%-", "")
-            name1 = string.gsub(name1, "%-" .. realm1, "")
-            if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
-            ChatDyeing[name1 .. "-" .. realm1] = {
-                oname = name1,
-                oclass = colortxt(name1),
-                orealm = realm1,
-            }
-        end
-    end
-    if IsInGroup() then
-        rnum = GetNumGroupMembers()
-        for i = 1, rnum - 1 do
-            local name1 = GetUnitName("party" .. i, true)
-            local realm1 = string.gsub(name1, ".+%-", "")
-            name1 = string.gsub(name1, "%-" .. realm1, "")
-            if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
-            ChatDyeing[name1 .. "-" .. realm1] = {
-                oname = name1,
-                oclass = colortxt(name1),
-                orealm = realm1,
-            }
-        
-        end
-    end
-end
-
+--玩家登陆事件
 Event("PLAYER_LOGIN", function()
     ADDfilter()
 end)
-
+--玩家进入世界事件
 Event("PLAYER_ENTERING_WORLD", function()
     addfilterlist()
     addfriends()
 end)
-
+--地图变更事件
 Event("ZONE_CHANGED", function()
     addfilterlist()
     addfriends()
 end)
-
+--插件加载事件
 Event("ADDON_LOADED", function()
     if not ChatDyeing then ChatDyeing = {} end
 end)
