@@ -22,42 +22,10 @@ end
 local function colortxt(name)
     if name then
         if UnitInRaid(name) or UnitInParty(name) or name == "player" then
-            local rsccodeclass = 0
             local _, rsctekclass = UnitClass(name)
             if rsctekclass then
-                rsctekclass = string.lower(rsctekclass)
-                if rsctekclass == "warrior" then rsccodeclass = 1
-                elseif rsctekclass == "deathknight" then rsccodeclass = 2
-                elseif rsctekclass == "paladin" then rsccodeclass = 3
-                elseif rsctekclass == "priest" then rsccodeclass = 4
-                elseif rsctekclass == "shaman" then rsccodeclass = 5
-                elseif rsctekclass == "druid" then rsccodeclass = 6
-                elseif rsctekclass == "rogue" then rsccodeclass = 7
-                elseif rsctekclass == "mage" then rsccodeclass = 8
-                elseif rsctekclass == "warlock" then rsccodeclass = 9
-                elseif rsctekclass == "hunter" then rsccodeclass = 10
-                elseif rsctekclass == "monk" then rsccodeclass = 11
-                elseif rsctekclass == "demonhunter" then rsccodeclass = 12
-                end
-                local tablecolor = {
-                    "|cFFC79C6E", --1
-                    "|CFFC41F3B", --2
-                    "|cFFF58CBA", --3
-                    "|CFFFFFFFF", --4
-                    "|cFF0070DE", --5
-                    "|CFFFF7C0A", --6
-                    "|CFFFFF569", --7
-                    "|CFF69CCF0", --8
-                    "|CFF9382C9", --9
-                    "|CFFABD473", --10
-                    "|CFF00FF96", --11
-                    "|CFFA330C9", --12
-                    "|cff999999"}
-                if rsccodeclass == 0 then
-                    return "|cff999999" --для цвет петов
-                else
-                    return tablecolor[rsccodeclass]
-                end
+                rsctekclass = string.upper(rsctekclass)
+                return rsctekclass
             end
         else
             return "" --цвет петов
@@ -101,7 +69,7 @@ local function GetColor(nr, name)
                     return ChatDyeing[i]["oclass"]
                 end
             end
-            return "|cFF000000"
+            return ""
         end
     end
 end
@@ -122,8 +90,7 @@ local function addcolor(str1, tag, str2)
     local str1end = substringend(string.lower(str1), "|cff")
     local stra, strb = string.find(str1end, "|r")
     if stra then
-        strmid = GetColor(1, tag) .. strmid .. "|r" --处理tag  将tag染色
-    
+        strmid = "|c"..RAID_CLASS_COLORS[GetColor(1, tag)].colorStr.. strmid .. "|r" --处理tag  将tag染色   
     end
     local a, b = string.find(str2, tag)--查看后续还有没有tag
     if a then --如果有
