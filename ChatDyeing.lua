@@ -1,4 +1,4 @@
-local friends = {} --存储关键字
+local friends = {}--存储关键字
 --注册事件
 local function Event(event, handler)
     if _G.event == nil then
@@ -158,20 +158,21 @@ local function addfilterlist()
                 orealm = realm1,
             }
         end
-    end
-    if IsInGroup() then
-        rnum = GetNumGroupMembers()
-        for i = 1, rnum - 1 do
-            local name1 = GetUnitName("party" .. i, true)
-            local realm1 = string.gsub(name1, ".+%-", "")
-            name1 = string.gsub(name1, "%-" .. realm1, "")
-            if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
-            ChatDyeing[name1 .. "-" .. realm1] = {
-                oname = name1,
-                oclass = GetClass(name1),
-                orealm = realm1,
-            }
-        
+    else
+        if IsInGroup() then
+            rnum = GetNumGroupMembers()
+            for i = 1, rnum - 1 do
+                local name1 = GetUnitName("party" .. i, true)
+                local realm1 = string.gsub(name1, ".+%-", "")
+                name1 = string.gsub(name1, "%-" .. realm1, "")
+                if realm1 == "" or realm1 == nil or realm1 == name1 then realm1 = realm end
+                ChatDyeing[name1 .. "-" .. realm1] = {
+                    oname = name1,
+                    oclass = GetClass(name1),
+                    orealm = realm1,
+                }
+            
+            end
         end
     end
 end
