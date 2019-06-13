@@ -110,7 +110,7 @@ local psfilter = function(_, event, msg, player, ...)
                 msg = addcolor(string.sub(msg, 1, a - 1), tag, string.sub(msg, b + 1, -1))
             end
             if string.find(msg, "|Hplayer:.+" .. tag .. "|r|h%[.+" .. tag .. "|r%]|h") then
-                msg = string.gsub(msg, "|Hplayer:.+" .. tag .. "|r|h%[.+" .. tag .. "|r%]|h", "[" .. GetColor(1, tag) .. "|Hplayer:" .. tag .. "|h" .. tag .. "|h|r]")
+                msg = string.gsub(msg, "|Hplayer:.+" .. tag .. "|r|h%[.+" .. tag .. "|r%]|h", "[" .. "|c" .. RAID_CLASS_COLORS[GetColor(1, tag)].colorStr .. "|Hplayer:" .. tag .. "|h" .. tag .. "|h|r]")
             end
         end
         return false, msg, player, ...
