@@ -109,6 +109,10 @@ local psfilter = function(_, event, msg, player, ...)
             if a then
                 msg = addcolor(string.sub(msg, 1, a - 1), tag, string.sub(msg, b + 1, -1))
             end
+        
+        end
+        for i = 1, #(friends) do
+            tag = friends[i]
             if string.find(msg, "|Hplayer:.+" .. tag .. "|r|h%[.+" .. tag .. "|r%]|h") then
                 msg = string.gsub(msg, "|Hplayer:.+" .. tag .. "|r|h%[.+" .. tag .. "|r%]|h", "[" .. "|c" .. RAID_CLASS_COLORS[GetColor(1, tag)].colorStr .. "|Hplayer:" .. tag .. "|h" .. tag .. "|h|r]")
             end
