@@ -2,5 +2,6 @@
 ## Title: ChatDyeing
 ## Author: anarnwa
 ## Version: 8.1.5
-## SavedVariables: ChatDyeing 
+## SavedVariables: ChatDyeing,ChatDyeingSettings 
 ChatDyeing.lua
+ChatDyeingUi.lua

@@ -55,7 +55,7 @@ local function GetColor(nr, name)
             if color ~= "" then
                 return color
             end
-            
+            if ChatDyeingSettings.chatdyeingonlyparty == true then return "" end
             for i in pairs(ChatDyeing) do
                 if (name == ChatDyeing[i]["oname"] and (realm == "" or realm == nil) and localrealm == ChatDyeing[i]["orealm"]) then
                     return ChatDyeing[i]["oclass"]
@@ -88,7 +88,7 @@ local function addcolor(str1, tag, str2)
     local str1end = substringend(string.lower(str1), "|cff")
     local stra, strb = string.find(str1end, "|r")
     if stra then
-        strmid = "|c" .. RAID_CLASS_COLORS[GetColor(1, tag)].colorStr .. strmid .. "|r" --处理tag  将tag染色
+        pcall(function()strmid = "|c" .. RAID_CLASS_COLORS[GetColor(1, tag)].colorStr .. strmid .. "|r" end)--处理tag  将tag染色
     end
     local a, b = string.find(str2, tag)--查看后续还有没有tag
     if a then --如果有
@@ -98,6 +98,7 @@ local function addcolor(str1, tag, str2)
 end
 --过滤函数
 local psfilter = function(_, event, msg, player, ...)
+    if ChatDyeingSettings.chatdyeingopen == false then return false end
     if friends == {} then
         return false
     else
@@ -122,10 +123,13 @@ local psfilter = function(_, event, msg, player, ...)
 end
 --添加关键字
 local function addfriends()
+    friends = {}
     local name, realm = UnitFullName("player")
     for i in pairs(ChatDyeing) do
         table.insert(friends, ChatDyeing[i]["oname"] .. "%-" .. ChatDyeing[i]["orealm"])
-        table.insert(friends, ChatDyeing[i]["oname"])
+        if ChatDyeingSettings.chatdyeingonlycomplete == false then
+            table.insert(friends, ChatDyeing[i]["oname"])
+        end
     end
     local aa = {}
     for k, v in pairs(friends) do
@@ -143,6 +147,7 @@ local function addfriends()
 end
 --存储信息
 local function addfilterlist()
+    if ChatDyeingSettings.chatdyeingstoprecording then return end
     local name, realm = UnitFullName("player")
     ChatDyeing[name .. "-" .. realm] = {
         oname = name,
@@ -263,4 +268,11 @@ end)
 --插件加载事件
 Event("ADDON_LOADED", function()
     if not ChatDyeing then ChatDyeing = {} end
+    if not ChatDyeingSettings then ChatDyeingSettings = {} end
+    if not ChatDyeingSettings.chatdyeingopen then ChatDyeingSettings.chatdyeingopen = true end
+    if not ChatDyeingSettings.chatdyeingonlyparty then ChatDyeingSettings.chatdyeingonlyparty = false end
+    if not ChatDyeingSettings.chatdyeingonlycomplete then ChatDyeingSettings.chatdyeingonlycomplete = false end
+    if not ChatDyeingSettings.chatdyeingstoprecording then ChatDyeingSettings.chatdyeingstoprecording = false end
+
+
 end)
