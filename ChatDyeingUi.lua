@@ -135,6 +135,7 @@ local function CreateUIFrames()
     Button:SetScript("OnClick", function(self) 
         if tempformat~=0 then
             table.remove(ChatDyeingDisable, tempformat)
+            UIDropDownMenu_SetText(chatdyeingdropdownlist, "移除黑名单")
         end
      end)
     --显示窗口
