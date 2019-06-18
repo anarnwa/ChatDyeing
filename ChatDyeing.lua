@@ -121,6 +121,17 @@ local psfilter = function(_, event, msg, player, ...)
         return false, msg, player, ...
     end
 end
+--移除黑名单数据
+local function removedisable()
+    for i,j in ipairs(ChatDyeingDisable) do
+        for k,v in ipairs(friends) do
+            if j==v then 
+                table.remove(friends,k) 
+            end
+        end
+    end
+    
+end
 --添加关键字
 local function addfriends()
     friends = {}
@@ -131,6 +142,7 @@ local function addfriends()
             table.insert(friends, ChatDyeing[i]["oname"])
         end
     end
+    removedisable()
     local aa = {}
     for k, v in pairs(friends) do
         aa[v] = true
@@ -269,10 +281,9 @@ end)
 Event("ADDON_LOADED", function()
     if not ChatDyeing then ChatDyeing = {} end
     if not ChatDyeingSettings then ChatDyeingSettings = {} end
+    if not ChatDyeingDisable then ChatDyeingDisable = {} end
     if not ChatDyeingSettings.chatdyeingopen then ChatDyeingSettings.chatdyeingopen = true end
     if not ChatDyeingSettings.chatdyeingonlyparty then ChatDyeingSettings.chatdyeingonlyparty = false end
     if not ChatDyeingSettings.chatdyeingonlycomplete then ChatDyeingSettings.chatdyeingonlycomplete = false end
     if not ChatDyeingSettings.chatdyeingstoprecording then ChatDyeingSettings.chatdyeingstoprecording = false end
-
-
 end)

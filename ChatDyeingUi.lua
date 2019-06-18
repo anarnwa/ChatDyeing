@@ -1,3 +1,16 @@
+local function AddChatDyeingDisable(str)
+    todo = true
+    if str=="" then return end 
+    for k, v in pairs(ChatDyeingDisable) do
+        if v == str then
+            todo = false
+            break
+        end
+    end
+    if todo then
+        table.insert(ChatDyeingDisable, str)
+    end
+end
 local function CreateUIFrames()
     if MainFrame ~= nil then
         MainFrame:Show()
@@ -80,6 +93,50 @@ local function CreateUIFrames()
     Button:SetText("清空已记录数据")
     Button:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 30, -200)
     Button:SetScript("OnClick", function(self)ChatDyeing = {} end)
+    --添加黑名单
+    Button = CreateFrame("EditBox", "chatdyeingadddisable", MainFrame, "InputBoxTemplate")
+    Button:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 40, -170)
+    Button:SetWidth(150)
+    Button:SetHeight(20)
+    Button:SetAutoFocus(false)
+    Button:SetText("添加染色黑名单")
+    Button:SetScript("OnEnterPressed", function(self)AddChatDyeingDisable(self:GetText())  self:SetText("添加成功") end)
+    Button:SetScript("OnEscapePressed", function(self)self:SetText("添加染色黑名单") end)
+    --下拉菜单
+    CreateFrame("Button", "chatdyeingdropdownlist", MainFrame, "UIDropDownMenuTemplate")
+    chatdyeingdropdownlist:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 200, -165)
+    local tempformat = 0
+    local function chatdyeingdropdownlist_OnClick(self, arg1, arg2, checked)
+        -- Update temp variable
+        tempformat = arg1
+        -- Update dropdownmenu text
+        UIDropDownMenu_SetText(chatdyeingdropdownlist, ChatDyeingDisable[tempformat])
+    end
+    local function chatdyeingdropdownlist_Initialize(self, level)
+        local info = UIDropDownMenu_CreateInfo()
+        info = UIDropDownMenu_CreateInfo()
+        info.func = chatdyeingdropdownlist_OnClick
+        for i,v in ipairs(ChatDyeingDisable) do
+            info.arg1, info.text = i, v
+            UIDropDownMenu_AddButton(info)
+        end    
+    end
+    UIDropDownMenu_Initialize(chatdyeingdropdownlist, chatdyeingdropdownlist_Initialize)
+    UIDropDownMenu_SetWidth(chatdyeingdropdownlist, 148);
+    UIDropDownMenu_SetButtonWidth(chatdyeingdropdownlist, 124)
+    UIDropDownMenu_SetText(chatdyeingdropdownlist, "移除黑名单")
+    UIDropDownMenu_JustifyText(chatdyeingdropdownlist, "LEFT")
+    --清除黑名单
+    Button = CreateFrame("Button", "chatdyeingclean", MainFrame, "UIPanelButtonTemplate")
+    Button:SetSize(50, 30)
+    Button:SetNormalFontObject("GameFontNormalSmall")
+    Button:SetText("清除")
+    Button:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 400, -165)
+    Button:SetScript("OnClick", function(self) 
+        if tempformat~=0 then
+            table.remove(ChatDyeingDisable, tempformat)
+        end
+     end)
     --显示窗口
     MainFrame:Show()
 end
