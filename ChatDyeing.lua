@@ -27,7 +27,7 @@ local function GetClass(name)
                 return rsctekclass
             end
         else
-            return "" --цвет петов
+            return ""
         end
     end
 
@@ -103,7 +103,6 @@ local psfilter = function(_, event, msg, player, ...)
         return false
     else
         local tag = ""
-        --local chanid, found, modify = select(5, ...), 0, nil
         for i = 1, #(friends) do
             tag = friends[i]
             a, b = string.find(msg, tag)
@@ -123,14 +122,14 @@ local psfilter = function(_, event, msg, player, ...)
 end
 --移除黑名单数据
 local function removedisable()
-    for i,j in ipairs(ChatDyeingDisable) do
-        for k,v in ipairs(friends) do
-            if j==v then 
-                table.remove(friends,k) 
+    for i, j in ipairs(ChatDyeingDisable) do
+        for k, v in ipairs(friends) do
+            if j == v then
+                table.remove(friends, k)
             end
         end
     end
-    
+
 end
 --添加关键字
 local function addfriends()

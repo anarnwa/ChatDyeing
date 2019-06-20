@@ -1,6 +1,6 @@
 local function AddChatDyeingDisable(str)
     todo = true
-    if str=="" then return end 
+    if str == "" then return end
     for k, v in pairs(ChatDyeingDisable) do
         if v == str then
             todo = false
@@ -68,7 +68,7 @@ local function CreateUIFrames()
     --只过滤小队或团队成员
     Button = CreateFrame("CheckButton", "chatdyeingonlyparty", MainFrame, "UICheckButtonTemplate")
     Button:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 30, -50)
-    _G[Button:GetName() .. "Text"]:SetText("只过滤小队或团队成员")
+    _G[Button:GetName() .. "Text"]:SetText("只为小队或团队成员染色")
     _G[Button:GetName() .. "Text"]:SetFontObject("GameFontHighlight")
     Button:SetChecked(ChatDyeingSettings.chatdyeingonlyparty == true)
     Button:SetScript("OnClick", function(self)ChatDyeingSettings.chatdyeingonlyparty = (self:GetChecked() or false) end)
@@ -100,7 +100,7 @@ local function CreateUIFrames()
     Button:SetHeight(20)
     Button:SetAutoFocus(false)
     Button:SetText("添加染色黑名单")
-    Button:SetScript("OnEnterPressed", function(self)AddChatDyeingDisable(self:GetText())  self:SetText("添加成功") end)
+    Button:SetScript("OnEnterPressed", function(self)AddChatDyeingDisable(self:GetText())self:SetText("添加成功") end)
     Button:SetScript("OnEscapePressed", function(self)self:SetText("添加染色黑名单") end)
     --下拉菜单
     CreateFrame("Button", "chatdyeingdropdownlist", MainFrame, "UIDropDownMenuTemplate")
@@ -114,12 +114,11 @@ local function CreateUIFrames()
     end
     local function chatdyeingdropdownlist_Initialize(self, level)
         local info = UIDropDownMenu_CreateInfo()
-        info = UIDropDownMenu_CreateInfo()
         info.func = chatdyeingdropdownlist_OnClick
-        for i,v in ipairs(ChatDyeingDisable) do
+        for i, v in ipairs(ChatDyeingDisable) do
             info.arg1, info.text = i, v
             UIDropDownMenu_AddButton(info)
-        end    
+        end
     end
     UIDropDownMenu_Initialize(chatdyeingdropdownlist, chatdyeingdropdownlist_Initialize)
     UIDropDownMenu_SetWidth(chatdyeingdropdownlist, 148);
@@ -132,12 +131,12 @@ local function CreateUIFrames()
     Button:SetNormalFontObject("GameFontNormalSmall")
     Button:SetText("清除")
     Button:SetPoint("TOPLEFT", Text, "BOTTOMLEFT", 400, -165)
-    Button:SetScript("OnClick", function(self) 
-        if tempformat~=0 then
+    Button:SetScript("OnClick", function(self)
+        if tempformat ~= 0 then
             table.remove(ChatDyeingDisable, tempformat)
             UIDropDownMenu_SetText(chatdyeingdropdownlist, "移除黑名单")
         end
-     end)
+    end)
     --显示窗口
     MainFrame:Show()
 end
