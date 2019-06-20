@@ -41,13 +41,6 @@ local function CreateUIFrames()
             end
         end)
     
-    MainFrame:SetScript("OnShow",
-        function(self)
-            if GIL_SyncOK == false then
-                SyncIgnoreList()
-            end
-        end)
-    
     local icon = MainFrame:CreateTexture("$parentIcon", "OVERLAY", nil, -8)
     --图标
     icon:SetSize(60, 60)
