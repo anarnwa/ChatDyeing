@@ -134,8 +134,23 @@ local function CreateUIFrames()
     MainFrame:Show()
 end
 
+local function UpdateCount()
+    count=0
+    for i in pairs(ChatDyeing) do
+        count=count+1
+    end
+    for i in pairs(ChatDyeingDisable) do
+        count=count-1
+    end
+    Text = chatdyeing:CreateFontString("FontString", "OVERLAY", "GameFontNormalLarge")
+    Text:SetPoint("TOPLEFT", MainFrame, "TOPLEFT", 200, -25)
+    Text:SetWidth(200)
+    Text:SetText("共计有效数据："..count.."条")
+end
+
 function SlashCmdList.ChatDyeing(msg)
     CreateUIFrames()
+    UpdateCount()
 end
 
 SLASH_ChatDyeing1 = "/cd"
