@@ -290,23 +290,15 @@ end
 Event(
     'PLAYER_LOGIN',
     function()
-        ADDfilter()
+        ADDfilter() --添加频道
     end
 )
---玩家进入世界事件
+--队伍更新
 Event(
-    'PLAYER_ENTERING_WORLD',
+    'GROUP_ROSTER_UPDATE',
     function()
-        addfilterlist()
-        addfriends()
-    end
-)
---地图变更事件
-Event(
-    'ZONE_CHANGED',
-    function()
-        addfilterlist()
-        addfriends()
+        addfilterlist() --更新数据表
+        addfriends() --根据数据表更新过滤器
     end
 )
 --插件加载事件
