@@ -301,6 +301,14 @@ Event(
         addfriends() --根据数据表更新过滤器
     end
 )
+--玩家进入世界事件
+Event(
+    'PLAYER_ENTERING_WORLD',
+    function()
+        addfilterlist()
+        addfriends()
+    end
+)
 --插件加载事件
 Event(
     'ADDON_LOADED',
