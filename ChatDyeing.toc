@@ -1,7 +1,7 @@
 ## Interface: 80200
 ## Title: ChatDyeing
 ## Author: anarnwa
-## Version: 8.1.5
+## Version: 8.2.0
 ## SavedVariables: ChatDyeing,ChatDyeingSettings ,ChatDyeingDisable
 ChatDyeing.lua
 ChatDyeingUi.lua
