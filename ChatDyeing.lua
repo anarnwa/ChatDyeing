@@ -286,6 +286,12 @@ local function ADDfilter()
     ChatFrame_AddMessageEventFilter('CHAT_MSG_WHISPER_INFORM', psfilter)
     ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', psfilter)
 end
+
+function updatechatdyeing()
+    addfilterlist() --更新数据表
+    addfriends() --根据数据表更新过滤器
+end
+
 --玩家登陆事件
 Event(
     'PLAYER_LOGIN',
@@ -297,16 +303,14 @@ Event(
 Event(
     'GROUP_ROSTER_UPDATE',
     function()
-        addfilterlist() --更新数据表
-        addfriends() --根据数据表更新过滤器
+        updatechatdyeing()
     end
 )
 --玩家进入世界事件
 Event(
     'PLAYER_ENTERING_WORLD',
     function()
-        addfilterlist()
-        addfriends()
+        updatechatdyeing()
     end
 )
 --插件加载事件

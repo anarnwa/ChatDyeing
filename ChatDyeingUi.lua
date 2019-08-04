@@ -101,13 +101,14 @@ local function CreateUIFrames()
     --忽略不完整的姓名
     Button = CreateFrame('CheckButton', 'chatdyeingonlycomplete', MainFrame, 'UICheckButtonTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -90)
-    _G[Button:GetName() .. 'Text']:SetText('只为完整姓名-服务器进行染色(重载或队伍更新后生效)')
+    _G[Button:GetName() .. 'Text']:SetText('只为完整姓名-服务器进行染色')
     _G[Button:GetName() .. 'Text']:SetFontObject('GameFontHighlight')
     Button:SetChecked(ChatDyeingSettings.chatdyeingonlycomplete == true)
     Button:SetScript(
         'OnClick',
         function(self)
             ChatDyeingSettings.chatdyeingonlycomplete = (self:GetChecked() or false)
+            updatechatdyeing()
         end
     )
     --停止记录新数据
