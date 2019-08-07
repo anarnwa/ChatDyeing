@@ -19,11 +19,7 @@ local function UpdateCount()
     for i in pairs(ChatDyeing) do
         count = count + 1
     end
-    discount = 0
-    for i in pairs(ChatDyeingDisable) do
-        discount = discount + 1
-    end
-    CountText:SetText('共计数据：' .. count .. '条\n其中有效数据：' .. count - discount .. '条\n已屏蔽数据：' .. discount .. '条')
+    CountText:SetText('共计数据：' .. count .. '条')
 end
 
 local function CreateUIFrames()
@@ -34,7 +30,7 @@ local function CreateUIFrames()
     MainFrame = CreateFrame('Frame', 'chatdyeing', UIParent, 'PortraitFrameTemplate')
     MainFrame:SetFrameStrata('DIALOG')
     MainFrame:SetWidth(500)
-    MainFrame:SetHeight(300)
+    MainFrame:SetHeight(400)
     MainFrame:SetPoint('CENTER', UIParent)
     MainFrame:SetMovable(true)
     MainFrame:EnableMouse(true)
@@ -123,12 +119,40 @@ local function CreateUIFrames()
             ChatDyeingSettings.chatdyeingstoprecording = (self:GetChecked() or false)
         end
     )
+    --设置记录过期时间
+    Text1 = MainFrame:CreateFontString('FontStr', 'OVERLAY', 'GameFontHighlight')
+    Text1:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 0, -170)
+    Text1:SetWidth(500)
+    Text1:SetText('记录过期时间（天）（为0 则永不过期 -1则离队后立刻删除记录）')
+
+    Button = CreateFrame('EditBox', 'chatdyeingsaverecordingtime', MainFrame, 'InputBoxTemplate')
+    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -200)
+    Button:SetWidth(150)
+    Button:SetHeight(20)
+    Button:SetAutoFocus(false)
+    Button:SetText(ChatDyeingSettings.chatdyeingsaverecordingtime)
+    Button:SetScript(
+        'OnEnterPressed',
+        function(self)
+            local n = tonumber(self:GetText())
+            if n then
+                ChatDyeingSettings.chatdyeingsaverecordingtime = n
+            end
+        end
+    )
+    Button:SetScript(
+        'OnEscapePressed',
+        function(self)
+            self:SetText(ChatDyeingSettings.chatdyeingsaverecordingtime)
+        end
+    )
+
     --清空记录
     Button = CreateFrame('Button', 'chatdyeingcleanrecord', MainFrame, 'UIPanelButtonTemplate')
     Button:SetSize(120, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
     Button:SetText('清空已记录数据')
-    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -200)
+    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -270)
     Button:SetScript(
         'OnClick',
         function(self)
@@ -137,7 +161,7 @@ local function CreateUIFrames()
     )
     --添加黑名单
     Button = CreateFrame('EditBox', 'chatdyeingadddisable', MainFrame, 'InputBoxTemplate')
-    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -170)
+    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -240)
     Button:SetWidth(150)
     Button:SetHeight(20)
     Button:SetAutoFocus(false)
@@ -159,7 +183,7 @@ local function CreateUIFrames()
     )
     --下拉菜单
     CreateFrame('Button', 'chatdyeingdropdownlist', MainFrame, 'UIDropDownMenuTemplate')
-    chatdyeingdropdownlist:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 200, -165)
+    chatdyeingdropdownlist:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 200, -235)
     local tempformat = 0
     local function chatdyeingdropdownlist_OnClick(self, arg1, arg2, checked)
         -- Update temp variable
@@ -185,7 +209,7 @@ local function CreateUIFrames()
     Button:SetSize(50, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
     Button:SetText('清除')
-    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 400, -165)
+    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 400, -235)
     Button:SetScript(
         'OnClick',
         function(self)

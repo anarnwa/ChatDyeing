@@ -180,11 +180,13 @@ local function addfilterlist()
     if ChatDyeingSettings.chatdyeingstoprecording then
         return
     end
+    addtime = date('%d %b %Y')
     local name, realm = UnitFullName('player')
     ChatDyeing[name .. '-' .. realm] = {
         oname = name,
         oclass = GetClass('player'),
-        orealm = realm
+        orealm = realm,
+        times = addtime
     }
     if IsInRaid() then
         rnum = GetNumGroupMembers()
@@ -198,7 +200,8 @@ local function addfilterlist()
             ChatDyeing[name1 .. '-' .. realm1] = {
                 oname = name1,
                 oclass = GetClass(name1),
-                orealm = realm1
+                orealm = realm1,
+                times = addtime
             }
         end
     else
@@ -214,7 +217,8 @@ local function addfilterlist()
                 ChatDyeing[name1 .. '-' .. realm1] = {
                     oname = name1,
                     oclass = GetClass(name1),
-                    orealm = realm1
+                    orealm = realm1,
+                    times = addtime
                 }
             end
         end
@@ -292,6 +296,76 @@ function updatechatdyeing()
     addfriends() --根据数据表更新过滤器
 end
 
+
+local function dateTonumber(dateStr)
+    if dateStr == nil then
+        return 0
+    end
+
+    local monthList = {'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'}
+    local words = {}
+
+    for word in dateStr:gmatch('%w+') do
+        table.insert(words, word)
+    end
+
+    local day = tonumber(words[1])
+    local year = tonumber(words[3])
+    local month = 0
+
+    for key, value in pairs(monthList) do
+        if value == words[2] then
+            month = tonumber(key)
+
+            break
+        end
+    end
+
+    --print ("monthStr="..monthStr.." month="..month.." day="..day.." year="..year)
+
+    if (not month) or (not day) or (not year) or (month < 1) or (month > 12) or (day < 1) or (day > 31) or (year < 2014) then
+        return 0
+    end
+
+    local calc1 = (month - 14) / 12
+    local calc2 = day - 32075 + (1461 * (year + 4800 + calc1) / 4)
+
+    calc2 = calc2 + (367 * (month - 2 - calc1 * 12) / 12)
+    calc2 = calc2 - (3 * ((year + 4900 + calc1) / 100) / 4)
+
+    return calc2
+end
+
+local function datetotoday(dateStr)
+    local addDate = dateTonumber(dateStr)
+    local today = dateTonumber(date('%d %b %Y'))
+
+    if addDate == 0 then
+        return -1
+    else
+        if addDate < today then
+            return math.floor(today - addDate)
+        else
+            return math.floor(addDate - today)
+        end
+    end
+end
+
+local function clearchatdyeing()
+    if ChatDyeingSettings.chatdyeingsaverecordingtime == 0 then
+        return
+    end
+    if ChatDyeingSettings.chatdyeingsaverecordingtime == -1 then
+        ChatDyeing = {}
+        return
+    end
+    for i in pairs(ChatDyeing) do       
+        if datetotoday(ChatDyeing[i].times) > ChatDyeingSettings.chatdyeingsaverecordingtime then
+            ChatDyeing[i]=nil
+        end
+    end
+end
+
 --玩家登陆事件
 Event(
     'PLAYER_LOGIN',
@@ -303,6 +377,7 @@ Event(
 Event(
     'GROUP_ROSTER_UPDATE',
     function()
+        clearchatdyeing()
         updatechatdyeing()
     end
 )
@@ -310,7 +385,8 @@ Event(
 Event(
     'PLAYER_ENTERING_WORLD',
     function()
-        updatechatdyeing()
+        clearchatdyeing()
+        updatechatdyeing()       
     end
 )
 --插件加载事件
@@ -337,6 +413,9 @@ Event(
         end
         if not ChatDyeingSettings.chatdyeingstoprecording then
             ChatDyeingSettings.chatdyeingstoprecording = false
+        end
+        if not ChatDyeingSettings.chatdyeingsaverecordingtime then
+            ChatDyeingSettings.chatdyeingsaverecordingtime = 30
         end
     end
 )
