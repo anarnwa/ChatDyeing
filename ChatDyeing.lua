@@ -108,6 +108,9 @@ local psfilter = function(_, event, msg, player, ...)
     if ChatDyeingSettings.chatdyeingopen == false then
         return false
     end
+    if string.find(msg, '|HMethodDungeonTools') then
+        return false
+    end
     if friends == {} then
         return false
     else
