@@ -147,7 +147,7 @@ local function removedisable()
     end
 end
 --添加关键字
-local function addfriends()
+ function chatdyeingaddkeys()
     friends = {}
     local name, realm = UnitFullName('player')
     for i in pairs(ChatDyeing) do
@@ -177,6 +177,7 @@ local function addfriends()
             return tostring(a) > tostring(b)
         end
     )
+    print("chatdyeing更新成功")
 end
 --存储信息
 local function addfilterlist()
@@ -294,12 +295,6 @@ local function ADDfilter()
     ChatFrame_AddMessageEventFilter('CHAT_MSG_YELL', psfilter)
 end
 
-function updatechatdyeing()
-    addfilterlist() --更新数据表
-    addfriends() --根据数据表更新过滤器
-end
-
-
 local function dateTonumber(dateStr)
     if dateStr == nil then
         return 0
@@ -381,15 +376,14 @@ Event(
     'GROUP_ROSTER_UPDATE',
     function()
         clearchatdyeing()
-        updatechatdyeing()
+        addfilterlist() --更新数据表
     end
 )
 --玩家进入世界事件
 Event(
     'PLAYER_ENTERING_WORLD',
     function()
-        clearchatdyeing()
-        updatechatdyeing()       
+        clearchatdyeing()      
     end
 )
 --插件加载事件

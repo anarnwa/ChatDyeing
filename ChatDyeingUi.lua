@@ -159,6 +159,20 @@ local function CreateUIFrames()
             ChatDyeing = {}
         end
     )
+
+    --更新过滤表
+    Button = CreateFrame('Button', 'chatdyeingaddkeylist', MainFrame, 'UIPanelButtonTemplate')
+    Button:SetSize(120, 30)
+    Button:SetNormalFontObject('GameFontNormalSmall')
+    Button:SetText('更新染色库')
+    Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 200, -270)
+    Button:SetScript(
+        'OnClick',
+        function(self)
+            chatdyeingaddkeys()
+        end
+    )
+
     --添加黑名单
     Button = CreateFrame('EditBox', 'chatdyeingadddisable', MainFrame, 'InputBoxTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -240)
