@@ -160,16 +160,17 @@ local function CreateUIFrames()
         end
     )
 
-    --更新过滤表
-    Button = CreateFrame('Button', 'chatdyeingaddkeylist', MainFrame, 'UIPanelButtonTemplate')
+    --刷新设置页
+    Button = CreateFrame('Button', 'chatdyeingsettingrefresh', MainFrame, 'UIPanelButtonTemplate')
     Button:SetSize(120, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
-    Button:SetText('更新染色库')
+    Button:SetText('刷新设置页面')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 200, -270)
     Button:SetScript(
         'OnClick',
         function(self)
-            chatdyeingaddkeys()
+            MainFrame:Hide()
+            MainFrame:Show()
         end
     )
 

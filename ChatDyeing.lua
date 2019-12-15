@@ -147,7 +147,7 @@ local function removedisable()
     end
 end
 --添加关键字
- function chatdyeingaddkeys()
+local function addkeys()
     friends = {}
     local name, realm = UnitFullName('player')
     for i in pairs(ChatDyeing) do
@@ -177,8 +177,8 @@ end
             return tostring(a) > tostring(b)
         end
     )
-    print("chatdyeing更新成功")
 end
+
 --存储信息
 local function addfilterlist()
     if ChatDyeingSettings.chatdyeingstoprecording then
@@ -227,6 +227,12 @@ local function addfilterlist()
             end
         end
     end
+end
+
+--刷新过滤表
+local function updatefilterlist()
+    addfilterlist()
+    addkeys()
 end
 --过滤频道
 local function ADDfilter()
@@ -357,9 +363,9 @@ local function clearchatdyeing()
         ChatDyeing = {}
         return
     end
-    for i in pairs(ChatDyeing) do       
+    for i in pairs(ChatDyeing) do
         if datetotoday(ChatDyeing[i].times) > ChatDyeingSettings.chatdyeingsaverecordingtime then
-            ChatDyeing[i]=nil
+            ChatDyeing[i] = nil
         end
     end
 end
@@ -375,15 +381,16 @@ Event(
 Event(
     'GROUP_ROSTER_UPDATE',
     function()
-        clearchatdyeing()
-        addfilterlist() --更新数据表
+        updatefilterlist()
+        --更新数据表
     end
 )
 --玩家进入世界事件
 Event(
     'PLAYER_ENTERING_WORLD',
     function()
-        clearchatdyeing()      
+        clearchatdyeing()
+        updatefilterlist()
     end
 )
 --插件加载事件
