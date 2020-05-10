@@ -32,6 +32,7 @@ local function GetClass(name)
         end
     end
 end
+
 --返回存储的角色职业
 local function GetColor(name)
     if name then
@@ -108,9 +109,10 @@ local psfilter = function(_, event, msg, player, ...)
     if ChatDyeingSettings.chatdyeingopen == false then
         return false
     end
-    if string.find(msg, '|HMethodDungeonTools') then
+    if string.find(msg:lower(), '|r') or string.find(msg:lower(), '|tinterface') then
         return false
     end
+
     if friends == {} then
         return false
     else

@@ -23,22 +23,22 @@ local function UpdateCount()
 end
 
 local function CreateUIFrames()
-    if MainFrame ~= nil then
-        MainFrame:Show()
+    if ChatDyeingFrame ~= nil then
+        ChatDyeingFrame:Show()
         return
     end
-    MainFrame = CreateFrame('Frame', 'chatdyeing', UIParent, 'PortraitFrameTemplate')
-    MainFrame:SetFrameStrata('DIALOG')
-    MainFrame:SetWidth(500)
-    MainFrame:SetHeight(400)
-    MainFrame:SetPoint('CENTER', UIParent)
-    MainFrame:SetMovable(true)
-    MainFrame:EnableMouse(true)
-    MainFrame:RegisterForDrag('LeftButton', 'RightButton')
-    MainFrame:SetClampedToScreen(true)
-    MainFrame.title = _G['chatdyeingTitleText']
-    MainFrame.title:SetText('chatdyeing')
-    MainFrame:SetScript(
+    ChatDyeingFrame = CreateFrame('Frame', 'chatdyeing', UIParent, 'PortraitFrameTemplate')
+    ChatDyeingFrame:SetFrameStrata('DIALOG')
+    ChatDyeingFrame:SetWidth(500)
+    ChatDyeingFrame:SetHeight(400)
+    ChatDyeingFrame:SetPoint('CENTER', UIParent)
+    ChatDyeingFrame:SetMovable(true)
+    ChatDyeingFrame:EnableMouse(true)
+    ChatDyeingFrame:RegisterForDrag('LeftButton', 'RightButton')
+    ChatDyeingFrame:SetClampedToScreen(true)
+    ChatDyeingFrame.title = _G['chatdyeingTitleText']
+    ChatDyeingFrame.title:SetText('chatdyeing')
+    ChatDyeingFrame:SetScript(
         'OnMouseDown',
         function(self)
             self:StartMoving()
@@ -46,7 +46,7 @@ local function CreateUIFrames()
         end
     )
 
-    MainFrame:SetScript(
+    ChatDyeingFrame:SetScript(
         'OnMouseUp',
         function(self)
             if self.isMoving then
@@ -56,22 +56,22 @@ local function CreateUIFrames()
         end
     )
 
-    local icon = MainFrame:CreateTexture('$parentIcon', 'OVERLAY', nil, -8)
+    local icon = ChatDyeingFrame:CreateTexture('$parentIcon', 'OVERLAY', nil, -8)
     --图标
     icon:SetSize(60, 60)
     icon:SetPoint('TOPLEFT', -5, 7)
     icon:SetTexture('Interface\\FriendsFrame\\Battlenet-Portrait')
     --标题
-    Text = MainFrame:CreateFontString('FontString', 'OVERLAY', 'GameFontNormalLarge')
-    Text:SetPoint('TOPLEFT', MainFrame, 'TOPLEFT', 20, -25)
+    Text = ChatDyeingFrame:CreateFontString('FontString', 'OVERLAY', 'GameFontNormalLarge')
+    Text:SetPoint('TOPLEFT', ChatDyeingFrame, 'TOPLEFT', 20, -25)
     Text:SetWidth(200)
     Text:SetText('ChatDyeing设置')
     --计数
     CountText = chatdyeing:CreateFontString('FontString', 'OVERLAY', 'GameFontNormalLarge')
-    CountText:SetPoint('TOPLEFT', MainFrame, 'TOPLEFT', 250, -40)
+    CountText:SetPoint('TOPLEFT', ChatDyeingFrame, 'TOPLEFT', 250, -40)
     CountText:SetWidth(200)
     --是否开启插件
-    Button = CreateFrame('CheckButton', 'chatdyeingopened', MainFrame, 'UICheckButtonTemplate')
+    Button = CreateFrame('CheckButton', 'chatdyeingopened', ChatDyeingFrame, 'UICheckButtonTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -10)
     _G[Button:GetName() .. 'Text']:SetText('开启插件')
     _G[Button:GetName() .. 'Text']:SetFontObject('GameFontHighlight')
@@ -83,7 +83,7 @@ local function CreateUIFrames()
         end
     )
     --只过滤小队或团队成员
-    Button = CreateFrame('CheckButton', 'chatdyeingonlyparty', MainFrame, 'UICheckButtonTemplate')
+    Button = CreateFrame('CheckButton', 'chatdyeingonlyparty', ChatDyeingFrame, 'UICheckButtonTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -50)
     _G[Button:GetName() .. 'Text']:SetText('只为小队或团队成员染色')
     _G[Button:GetName() .. 'Text']:SetFontObject('GameFontHighlight')
@@ -95,7 +95,7 @@ local function CreateUIFrames()
         end
     )
     --忽略不完整的姓名
-    Button = CreateFrame('CheckButton', 'chatdyeingonlycomplete', MainFrame, 'UICheckButtonTemplate')
+    Button = CreateFrame('CheckButton', 'chatdyeingonlycomplete', ChatDyeingFrame, 'UICheckButtonTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -90)
     _G[Button:GetName() .. 'Text']:SetText('只为完整姓名-服务器进行染色')
     _G[Button:GetName() .. 'Text']:SetFontObject('GameFontHighlight')
@@ -108,7 +108,7 @@ local function CreateUIFrames()
         end
     )
     --停止记录新数据
-    Button = CreateFrame('CheckButton', 'chatdyeingstoprecording', MainFrame, 'UICheckButtonTemplate')
+    Button = CreateFrame('CheckButton', 'chatdyeingstoprecording', ChatDyeingFrame, 'UICheckButtonTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 30, -130)
     _G[Button:GetName() .. 'Text']:SetText('停止记录新数据')
     _G[Button:GetName() .. 'Text']:SetFontObject('GameFontHighlight')
@@ -120,12 +120,12 @@ local function CreateUIFrames()
         end
     )
     --设置记录过期时间
-    Text1 = MainFrame:CreateFontString('FontStr', 'OVERLAY', 'GameFontHighlight')
+    Text1 = ChatDyeingFrame:CreateFontString('FontStr', 'OVERLAY', 'GameFontHighlight')
     Text1:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 0, -170)
     Text1:SetWidth(500)
     Text1:SetText('记录过期时间（天）（为0 则永不过期 -1则离队后立刻删除记录）')
 
-    Button = CreateFrame('EditBox', 'chatdyeingsaverecordingtime', MainFrame, 'InputBoxTemplate')
+    Button = CreateFrame('EditBox', 'chatdyeingsaverecordingtime', ChatDyeingFrame, 'InputBoxTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -200)
     Button:SetWidth(150)
     Button:SetHeight(20)
@@ -148,7 +148,7 @@ local function CreateUIFrames()
     )
 
     --清空记录
-    Button = CreateFrame('Button', 'chatdyeingcleanrecord', MainFrame, 'UIPanelButtonTemplate')
+    Button = CreateFrame('Button', 'chatdyeingcleanrecord', ChatDyeingFrame, 'UIPanelButtonTemplate')
     Button:SetSize(120, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
     Button:SetText('清空已记录数据')
@@ -161,7 +161,7 @@ local function CreateUIFrames()
     )
 
     --刷新设置页
-    Button = CreateFrame('Button', 'chatdyeingsettingrefresh', MainFrame, 'UIPanelButtonTemplate')
+    Button = CreateFrame('Button', 'chatdyeingsettingrefresh', ChatDyeingFrame, 'UIPanelButtonTemplate')
     Button:SetSize(120, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
     Button:SetText('刷新设置页面')
@@ -169,13 +169,13 @@ local function CreateUIFrames()
     Button:SetScript(
         'OnClick',
         function(self)
-            MainFrame:Hide()
-            MainFrame:Show()
+            ChatDyeingFrame:Hide()
+            ChatDyeingFrame:Show()
         end
     )
 
     --添加黑名单
-    Button = CreateFrame('EditBox', 'chatdyeingadddisable', MainFrame, 'InputBoxTemplate')
+    Button = CreateFrame('EditBox', 'chatdyeingadddisable', ChatDyeingFrame, 'InputBoxTemplate')
     Button:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 40, -240)
     Button:SetWidth(150)
     Button:SetHeight(20)
@@ -197,7 +197,7 @@ local function CreateUIFrames()
         end
     )
     --下拉菜单
-    CreateFrame('Button', 'chatdyeingdropdownlist', MainFrame, 'UIDropDownMenuTemplate')
+    CreateFrame('Button', 'chatdyeingdropdownlist', ChatDyeingFrame, 'UIDropDownMenuTemplate')
     chatdyeingdropdownlist:SetPoint('TOPLEFT', Text, 'BOTTOMLEFT', 200, -235)
     local tempformat = 0
     local function chatdyeingdropdownlist_OnClick(self, arg1, arg2, checked)
@@ -220,7 +220,7 @@ local function CreateUIFrames()
     UIDropDownMenu_SetText(chatdyeingdropdownlist, '移除黑名单')
     UIDropDownMenu_JustifyText(chatdyeingdropdownlist, 'LEFT')
     --清除黑名单
-    Button = CreateFrame('Button', 'chatdyeingclean', MainFrame, 'UIPanelButtonTemplate')
+    Button = CreateFrame('Button', 'chatdyeingclean', ChatDyeingFrame, 'UIPanelButtonTemplate')
     Button:SetSize(50, 30)
     Button:SetNormalFontObject('GameFontNormalSmall')
     Button:SetText('清除')
@@ -236,7 +236,7 @@ local function CreateUIFrames()
         end
     )
     --显示窗口
-    MainFrame:Show()
+    ChatDyeingFrame:Show()
 end
 
 function SlashCmdList.ChatDyeing(msg)
